@@ -1,0 +1,45 @@
+import random
+import math
+
+def gen_prime():
+    while True:
+        p = random.randrange(1000, 5000)
+        for i in range(2, int(p**0.5)+1):
+            if p % i == 0:
+                break
+        else:
+            return p
+
+p = gen_prime()
+q = gen_prime()
+n = p * q
+phi = (p - 1) * (q - 1)
+
+e = 65537
+if math.gcd(e, phi) != 1:
+    e = 3
+
+def modinv(a, m):
+    for x in range(1, m):
+        if (a * x) % m == 1:
+            return x
+
+d = modinv(e, phi)
+
+def encrypt(msg):
+    return pow(msg, e, n)
+
+def decrypt(cipher):
+    return pow(cipher, d, n)
+
+msg = 123
+cipher = encrypt(msg)
+plain = decrypt(cipher)
+
+print("p =", p)
+print("q =", q)
+print("n =", n)
+print("e =", e)
+print("d =", d)
+print("Cipher =", cipher)
+print("Decrypted =", plain)
